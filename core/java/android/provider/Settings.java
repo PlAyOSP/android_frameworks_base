@@ -2646,6 +2646,14 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+        /** 
+         * Whether to use horizontal recents tasks (WebAOKP)
+         * 
+         * @hide
+         */
+         public static final String HORIZONTAL_RECENTS_TASK_PANEL = "horizontal_recents_task_panel";
+
     }
 
     /**

@@ -2231,6 +2231,8 @@ public final class Settings {
          */
         public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
 
+	public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+
          /**
          * Whether to control brightness from status bar
          *

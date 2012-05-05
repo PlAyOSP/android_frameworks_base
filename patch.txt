@@ -1,0 +1,31 @@
+From 46fa036c7bcd48885b926018091f346ee2d46ad9 Mon Sep 17 00:00:00 2001
+From: blunden <blunden2@gmail.com>
+Date: Fri, 4 May 2012 20:06:17 +0200
+Subject: [PATCH] Adjust statusbar PowerWidget indicator color to match ICS
+ blue
+
+The current color of the indicator when active doesn't match
+the blue line below it due to the resulting alpha value. This
+also makes the on/off status more noticeable.
+
+Change-Id: I45923e0cadf60950f8c7566178b97bb8f0e99fc5
+---
+ .../src/com/android/systemui/statusbar/powerwidget/PowerButton.java  |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/powerwidget/PowerButton.java b/packages/SystemUI/src/com/android/systemui/statusbar/powerwidget/PowerButton.java
+index a166a1e..864ba35 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/powerwidget/PowerButton.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/powerwidget/PowerButton.java
+@@ -114,7 +114,7 @@ public void handleMessage(Message msg) {
+ 
+                     int sColorMaskBase = Settings.System.getInt(context.getContentResolver(),
+                             Settings.System.EXPANDED_VIEW_WIDGET_COLOR, 0xFF33B5E5);
+-                    int sColorMaskOn    = (sColorMaskBase & 0x00FFFFFF) | 0xA0000000;
++                    int sColorMaskOn    = sColorMaskBase;
+                     int sColorMaskOff   = (sColorMaskBase & 0x00FFFFFF) | 0x33000000;
+                     int sColorMaskInter = (sColorMaskBase & 0x00FFFFFF) | 0x60000000;
+ 
+-- 
+1.7.10
+

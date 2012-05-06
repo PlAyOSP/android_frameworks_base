@@ -2654,20 +2654,6 @@ public final class Settings {
          */
          public static final String HORIZONTAL_RECENTS_TASK_PANEL = "horizontal_recents_task_panel";
 
-        /**
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
-
-        /**
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
-
-        /**
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
     }
 
     /**

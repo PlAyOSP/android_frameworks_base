@@ -973,7 +973,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mStatusBarCanHide
                 ? com.android.internal.R.dimen.status_bar_height
                 : com.android.internal.R.dimen.system_bar_height);
-	final int showByDefault = mContext.getResources().getBoolean(
+        final int showByDefault = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
         mHasNavigationBar = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.NAVIGATION_BAR_SHOW, showByDefault) == 1;
@@ -984,17 +984,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if      (navBarOverride.equals("1")) mHasNavigationBar = false;
             else if (navBarOverride.equals("0")) mHasNavigationBar = true;
         }
-
-        if (mNavBarFirstBootFlag){
-        	mHasNavigationBar = (showByDefault == 1);
-        	mNavBarFirstBootFlag = false;
-        	// at first boot up, we need to make sure navbar gets created (or obey framework setting).
-        	// this should quickly get over-ridden by the settings observer if it was
-        	// disabled by the user.
-        }
-        if(!mStatusBarCanHide)
-            mHasNavigationBar = false;
-
         if (mHasNavigationBar) {
             mNavigationBarHeight = Settings.System.getInt(
                     mContext.getContentResolver(),
@@ -1048,11 +1037,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Surface.ROTATION_0);
             mUserRotationAngles = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
-	    boolean hasNavBarChanged = Settings.System.getInt(resolver, Settings.System.NAVIGATION_BAR_SHOW, 1) == 1;
+
+	    boolean hasNavBarChanged = Settings.System.getInt(resolver, Settings.System.NAVIGATION_BAR_BUTTONS_SHOW, 0) == 1;
             if (mHasNavigationBar != hasNavBarChanged) {
-                mHasNavigationBar = hasNavBarChanged;
-            	setInitialDisplaySize(mUnrestrictedScreenWidth,mUnrestrictedScreenHeight);
-            }
+	              setInitialDisplaySize(mUnrestrictedScreenWidth,mUnrestrictedScreenHeight);
+             }
 
             if (mAccelerometerDefault != accelerometerDefault) {
                 mAccelerometerDefault = accelerometerDefault;

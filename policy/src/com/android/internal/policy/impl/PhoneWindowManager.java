@@ -294,6 +294,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     final ArrayList<WindowState> mStatusBarPanels = new ArrayList<WindowState>();
     WindowState mNavigationBar = null;
     boolean mHasNavigationBar = false;
+    private boolean mNavBarFirstBootFlag = true;
     int mNavigationBarWidth = 0, mNavigationBarHeight = 0;
 
     WindowState mKeyguard = null;
@@ -504,7 +505,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     "fancy_rotation_anim"), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this);
+                    Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this);	    
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVIGATION_BAR_SHOW), false, this);
             updateSettings();
         }
 
@@ -971,8 +974,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 ? com.android.internal.R.dimen.status_bar_height
                 : com.android.internal.R.dimen.system_bar_height);
 
-        mHasNavigationBar = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar);
+        final int showByDefault = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
+        mHasNavigationBar = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NAVIGATION_BAR_SHOW, showByDefault) == 1;
         // Allow a system property to override this. Used by the emulator.
         // See also hasNavigationBar().
         String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
@@ -981,14 +986,33 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             else if (navBarOverride.equals("0")) mHasNavigationBar = true;
         }
 
-        mNavigationBarHeight = mHasNavigationBar
-                ? mContext.getResources().getDimensionPixelSize(
-                    com.android.internal.R.dimen.navigation_bar_height)
-                : 0;
-        mNavigationBarWidth = mHasNavigationBar
-                ? mContext.getResources().getDimensionPixelSize(
-                    com.android.internal.R.dimen.navigation_bar_width)
-                : 0;
+        if (mNavBarFirstBootFlag){
+        	mHasNavigationBar = (showByDefault == 1);
+        	mNavBarFirstBootFlag = false;
+        	// at first boot up, we need to make sure navbar gets created (or obey framework setting).
+        	// this should quickly get over-ridden by the settings observer if it was
+        	// disabled by the user.
+        }
+        if(!mStatusBarCanHide)
+            mHasNavigationBar = false;
+
+        if (mHasNavigationBar) {
+            mNavigationBarHeight = Settings.System.getInt(
+                    mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_HEIGHT,
+                    mContext.getResources()
+                            .getDimensionPixelSize(
+                                    com.android.internal.R.dimen.navigation_bar_height));
+            mNavigationBarWidth = Settings.System.getInt(
+                    mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_WIDTH,
+                    mContext.getResources()
+                            .getDimensionPixelSize(
+                                    com.android.internal.R.dimen.navigation_bar_width));
+        } else {
+            mNavigationBarHeight = 0;
+            mNavigationBarWidth = 0;
+        }
 
         if ("portrait".equals(SystemProperties.get("persist.demo.hdmirotation"))) {
             mHdmiRotation = mPortraitRotation;
@@ -1025,6 +1049,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Surface.ROTATION_0);
             mUserRotationAngles = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
+	    boolean hasNavBarChanged = Settings.System.getInt(resolver, Settings.System.NAVIGATION_BAR_SHOW,
+                            1) == 1;
+            if (mHasNavigationBar != hasNavBarChanged) {
+                mHasNavigationBar = hasNavBarChanged;
+            	setInitialDisplaySize(mUnrestrictedScreenWidth,mUnrestrictedScreenHeight);
+            }
 
             if (mAccelerometerDefault != accelerometerDefault) {
                 mAccelerometerDefault = accelerometerDefault;

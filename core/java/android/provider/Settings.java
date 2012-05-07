@@ -2231,7 +2231,25 @@ public final class Settings {
          */
         public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
 
+	/**
+	*@hide
+	*/
 	public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+
+	/**
+	*@hide
+	*/
+	public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
+
+	 /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+
+        /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
 
          /**
          * Whether to control brightness from status bar

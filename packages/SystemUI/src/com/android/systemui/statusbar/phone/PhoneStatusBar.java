@@ -2418,7 +2418,10 @@ public class PhoneStatusBar extends StatusBar {
         mNotificationData.clear();
 
         if (mNavigationBarView != null) {
+<<<<<<< HEAD
             mNavigationBarView.unregisterReceivers();
+=======
+>>>>>>> 66ba139... Merge "Additional fixes for button/keyboard backlight auto-brightness." into ics
             WindowManagerImpl.getDefault().removeView(mNavigationBarView);
         }
         View newStatusBarView = makeStatusBarView();
